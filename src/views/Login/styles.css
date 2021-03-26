@@ -1,0 +1,39 @@
+
+
+  #login-main {
+    height: 100vh;
+    background-color: green;
+    background-image: url("https://images.unsplash.com/photo-1565793298595-6a879b1d9492?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1651&q=80");
+  }
+
+  #login-container{
+    background:white;
+    height: 100%;
+    position: fixed;
+  }
+
+  #logo-container{
+    width: 380px;
+    margin-top: 25px;
+  }
+
+  #login-container .App {
+    font-family: sans-serif;
+    text-align: center;
+  }
+  
+  #login-container .form {
+    max-width: 330px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  
+  #login-container .form .form__custom-button {
+    margin-top: 50px;
+    background-color: #f07926;
+  }
+  
