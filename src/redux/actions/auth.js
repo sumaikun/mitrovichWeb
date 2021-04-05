@@ -28,9 +28,8 @@ import {
       //console.log("got dispatch");
       return api.login("auth", creds)
         .then(( response ) => {
-          //console.log(response)
           // Dispatch the success action
-          dispatch(receiveLogin(response.data.user,response.data.token,response.data.userType));
+          dispatch(receiveLogin(response.data,response.data.token,response.data.role));
           if(cb) { cb(true,false) }
         })
         .catch(err => { console.log("Error: ", err)

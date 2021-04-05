@@ -1,31 +1,36 @@
 import {
     SET_USERS,
     REMOVE_USER,
-    SELECT_USER
+    SELECT_USER,
+    SELECT_USER_ID
   } from "../constants";
-  import api from "middleware/api";
-
-  
-  
+  import api from "middleware/api";  
   
   function setUsers(users) {
     return {
       type: SET_USERS,   
-      users:users
+      users
     };
   }
 
   function removeUser(user) {
     return {
       type: REMOVE_USER,   
-      user:user
+      user
     };
   }
 
   function selectUser(user){
     return{
       type: SELECT_USER,   
-      user:user
+      user
+    }
+  }
+
+  export function selectUserId( id ){
+    return{
+      type: SELECT_USER_ID,
+      id
     }
   }
   
@@ -55,11 +60,14 @@ import {
   
     return dispatch => {
       
-      if(user._id){
-        return api.putData("users/"+user._id,user)
-        .then(( response ) => {
+      const id = user._id
 
-          //dispatch(addUser(user));
+      if(id){
+        
+        delete user._id
+        
+        return api.putData("users/"+id,user)
+        .then(( response ) => {
           
           if(cb) { cb(response,false) }
         
@@ -71,9 +79,7 @@ import {
         return api.postData("users",user)
         .then(( response ) => {
 
-          //dispatch(addUser(user));
-
-          dispatch(selectUser(response.data));
+          //dispatch(selectUser(response.data));
           
           if(cb) { cb(response,false) }
         
@@ -122,14 +128,7 @@ import {
           if(cb) { cb(false,true) }          
         
         });
-      }else{
-        
-        dispatch(selectUser(
-          new User()
-        ));
-        if(cb) { cb(true,false) }
-      
-      }      
+      }
     }
   }
   

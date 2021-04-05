@@ -1,7 +1,4 @@
 import api from "../middleware/api";
-import {
-    SET_CURRENT_PATIENT
-  } from "../constants";
 
 export function uploadFileToServer(file,cb){
 

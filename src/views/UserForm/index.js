@@ -1,7 +1,6 @@
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -12,8 +11,15 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import Alert from "components/Alert"
 
-import avatar from "assets/img/faces/marc.jpg";
+//assets
+import avatar from "assets/img/user-icon.png";
+
+
+//redux
+import { connect } from "react-redux";
+import { saveUser, getUser } from "redux/actions/users";
 
 const styles = {
   cardCategoryWhite: {
@@ -36,120 +42,176 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function UserForm() {
+
+
+function UserForm(props) {
+  
   const classes = useStyles();
+
+  const [ formData, setFormData ] = React.useState({ name:"",lastName:"",email:"",role:"" })
+
+  const [ confirmPassword, setConfirmPassword ] = React.useState()
+
+  const [ alertProperties, setAlertProperties ] = React.useState({ severity:"", message:"", open:false })
+
+  const checkPassword = ( str ) => {
+    var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return re.test(str);
+  }
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]:e.target.value  })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    //console.log("formData",formData)
+
+    if(!checkPassword(confirmPassword))
+    {
+      return setAlertProperties({ severity:"error", message:"Las contraseña debe contener al menos 8 dígitos, mayuscula, minuscula un número y caractér especial (@#$&)", open:true })
+    }
+
+    if(formData.password != confirmPassword)
+    {
+      return setAlertProperties({ severity:"error", message:"Las contraseñas no coinciden", open:true })
+    }
+
+    //console.log(checkPassword(confirmPassword))
+
+    props.saveUser({ ...formData, _id:props.selectedId },(success,error) =>{
+      if(success)
+      {
+        setAlertProperties({ severity:"success", message:"Información guardada", open:true })
+      }
+      if(error)
+      {
+        setAlertProperties({ severity:"error", message:"Hubo un error guardando la información", open:true })
+      }
+    })
+   
+  }
+
+  React.useEffect(()=>{
+    if(props.selectedId){
+      props.getUser(props.selectedId)
+    }
+  },[props.selectedId])
+
+  React.useEffect(()=>{
+    if( props.selectedUser && ( props.selectedUser._id == props.selectedId ) ){
+
+      const { name, lastName, email, role } = props.selectedUser
+
+      setFormData({
+        name,lastName,email,role
+      })
+
+    }
+  },[props.selectedUser])
+
   return (
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={8}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
-            </CardHeader>
-            <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="Company (disabled)"
-                    id="company-disabled"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      disabled: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Email address"
-                    id="email-address"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="First Name"
-                    id="first-name"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="Last Name"
-                    id="last-name"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="City"
-                    id="city"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Country"
-                    id="country"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Postal Code"
-                    id="postal-code"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-                  <CustomInput
-                    labelText="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-                    id="about-me"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary">Update Profile</Button>
-            </CardFooter>
-          </Card>
+          <form onSubmit={handleSubmit} >
+            <Card>
+              <CardHeader color="warning">
+                <h4 className={classes.cardTitleWhite}>Usuario</h4>
+                <p className={classes.cardCategoryWhite}>Completa el perfil de usuario</p>
+              </CardHeader>
+              <CardBody>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Nombres"
+                      id="nombre"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      handleChange={handleChange}
+                      required={true}
+                      name="name"
+                      value={formData.name}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Apellidos"
+                      id="apellido"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      handleChange={handleChange}
+                      required={true}
+                      name="lastName"
+                      value={formData.lastName}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Correo Electronico"
+                      id="correo-electronico"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      type="email"
+                      handleChange={handleChange}
+                      required={true}
+                      name="email"
+                      value={formData.email}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                        type="select"
+                        labelText="Rol de usuario"
+                        id="correo-electronico"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        options={
+                          ["admin", "operator","customer"]
+                        }
+                        handleChange={handleChange}
+                        required={true}
+                        name="role"
+                        value={formData.role}
+                      />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Contraseña"
+                      id="contraseña"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      type="password"
+                      handleChange={handleChange}
+                      required={true}
+                      name="password"
+                      value={formData.password}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Confirmar Contraseña"
+                      id="confirmar-contraseña"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      type="password"
+                      handleChange={(e)=>{ setConfirmPassword( e.target.value ) }}
+                      required={true}
+                    />
+                  </GridItem>
+                </GridContainer>
+              </CardBody>
+              <CardFooter>
+                <Button color="warning" type="submit" >Guardar</Button>
+              </CardFooter>
+            </Card>
+          </form>
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card profile>
@@ -159,20 +221,36 @@ export default function UserForm() {
               </a>
             </CardAvatar>
             <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
+              <Button color="warning" round>
+                Subir Imagen
               </Button>
             </CardBody>
           </Card>
         </GridItem>
       </GridContainer>
+      <Alert delay={4500}
+        open={alertProperties.open}
+        message={alertProperties.message}
+        severity={alertProperties.severity}
+        handleClose={ () => setAlertProperties({ ...alertProperties, open:false }) }
+      />
     </div>
   );
 }
+
+const mapStateToProps = ( state ) => {
+
+  const { users, selectedId, selectedUser } = state.users
+
+  const { loading } = state.app
+
+  return {
+    users,
+    selectedId,
+    selectedUser,
+    loading  
+  };
+};
+
+
+export default connect(mapStateToProps, { saveUser, getUser })(UserForm);

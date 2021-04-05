@@ -59,23 +59,47 @@ const persistor = persistStore(store)
 
 const hist = createBrowserHistory();
 
-store.subscribe( () => {
-  const state = store.getState()
-})
+export const App = () => {
+
+  //const [ isLoading, setLoading ] = React.useState( false )
+
+  const [ isAuth, setAuth ] = React.useState( false )
+
+  React.useEffect( ()=>{
+    //console.log("store.getState()",store.getState())
+    store.getState().app?.loading && store.dispatch({type:"SET_FETCHING",payload:false})
+    //store.getState().app?.loading != isLoading &&  setLoading(store.getState().app?.loading)
+    store.getState().auth?.token != isAuth && setAuth(store.getState().auth?.token)
+  },[])
+
+  store.subscribe( () => {
+    console.log("store.getState()",store.getState())
+    store.getState().auth?.token != isAuth && setAuth(store.getState().auth?.token)
+  })
+
+  return(
+    <React.Fragment>
+       { store.getState().app?.loading ? <Loading/> :
+          <Router history={hist}>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/admin" component={ isAuth ? Admin : Login } />
+              <Redirect from="/" to="/admin/dashboard" />
+            </Switch>
+          </Router>
+        }    
+    </React.Fragment>      
+  )
+
+}
 
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      { store.getState().app?.loading ? <Loading/> :
-        <Router history={hist}>
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/admin" component={Admin} />
-            <Redirect from="/" to="/admin/dashboard" />
-          </Switch>
-        </Router>
-      }       
+      <App/>
     </PersistGate>    
   </Provider>,
    document.getElementById("root")
 );
+
+

@@ -2,7 +2,8 @@ import {
     SET_USERS,
     ADD_USER,
     REMOVE_USER,
-    SELECT_USER
+    SELECT_USER,
+    SELECT_USER_ID
   } from "../constants";
   
   let index
@@ -10,7 +11,8 @@ import {
   export function users(
     state = {
       users:[],     
-      selectedUser:{} 
+      selectedUser:{} ,
+      selectedId:null
     },
     action
   ) {
@@ -43,6 +45,12 @@ import {
         state.users.splice(index,1);
 
         return state;
+
+      case SELECT_USER_ID:
+        console.log("selected id",action)
+        return Object.assign({}, state, {
+          selectedId:action.id,         
+        });
 
       default:
         return state;

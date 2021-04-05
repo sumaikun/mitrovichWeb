@@ -12,6 +12,9 @@ import Check from "@material-ui/icons/Check";
 // core components
 import styles from "assets/jss/material-dashboard-react/components/customInputStyle.js";
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+
 const useStyles = makeStyles(styles);
 
 export default function CustomInput(props) {
@@ -25,7 +28,10 @@ export default function CustomInput(props) {
     error,
     success,
     type,
-    handleChange
+    handleChange,
+    required,
+    name,
+    value
   } = props;
 
   const labelClasses = classNames({
@@ -54,6 +60,7 @@ export default function CustomInput(props) {
           {labelText}
         </InputLabel>
       ) : null}
+      { type != "select" && 
       <Input
         classes={{
           root: marginTop,
@@ -64,7 +71,25 @@ export default function CustomInput(props) {
         {...inputProps}
         type={type}
         onChange={ e => { handleChange(e) }}
-      />
+        required={required}
+        name={name}
+        value={value}
+      />} 
+      { type == "select" && 
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              fullWidth
+              onChange={ e => { handleChange(e) }}
+              required={required}
+              name={name}
+              value={value}
+            >
+              {
+                props.options.map( (option, key) =>  <MenuItem key={key} value={option} >{option}</MenuItem>  )
+              }
+            </Select>
+      }
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />
       ) : success ? (

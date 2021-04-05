@@ -9,9 +9,10 @@ import Button from "components/Button/Button.js";
 
 //local assets
 import logo from "assets/img/mitrovich-logo.png";
+import Background from "assets/img/logistic.jpg";
 import "./styles.css";
 
-//actions
+//redux
 import { connect } from "react-redux";
 import { loginUser } from "redux/actions/auth";
 import { withRouter } from 'react-router-dom';
@@ -44,7 +45,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div id="login-main">
+      <div id="login-main" style={{backgroundImage: `url(${Background})`}} >
         <div id="login-container" >
         <div style={{display:"flex",justifyContent:"center"}} >
           <div id="logo-container" >

@@ -14,7 +14,7 @@ const useStyles = makeStyles(styles);
 
 export default function SnackbarContent(props) {
   const classes = useStyles();
-  const { message, color, close, icon, rtlActive } = props;
+  const { message, color, close, icon, rtlActive, onClick, className } = props;
   var action = [];
   const messageClasses = classNames({
     [classes.iconMessage]: icon !== undefined
@@ -45,6 +45,11 @@ export default function SnackbarContent(props) {
         action: classNames({ [classes.actionRTL]: rtlActive })
       }}
       action={action}
+      onClick={(e)=>{
+         e.preventDefault()
+         onClick() 
+      }}
+      className={className}
     />
   );
 }

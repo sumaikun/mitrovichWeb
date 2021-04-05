@@ -16,3 +16,9 @@ export const ADD_USER = "SET_USERS";
 export const REMOVE_USER = "SET_USERS";
 
 export const SELECT_USER = "SELECT_USER";
+
+export const SELECT_USER_ID = "SELECT_USER_ID";
+
+// ---------------- Ecommerce types --------------------------
+
+export const SET_ECOMMERCE_SHIPPINGS = "SET_ECOMMERCE_SHIPPINGS";

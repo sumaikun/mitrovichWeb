@@ -11,7 +11,7 @@ import CardBody from "components/Card/CardBody.js";
 
 //redux
 import { connect } from "react-redux";
-import { getUsers,selectUserId } from "redux/actions/users";
+import { getEcommerceShippings } from "redux/actions/ecommerce";
 
 const styles = {
   cardCategoryWhite: {
@@ -45,15 +45,12 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-function TableList(props) {
+function EcommerceList(props) {
 
   const classes = useStyles();
 
-  React.useEffect( () => {
-   
-    props.getUsers()
-    props.selectUserId(null)
-    
+  React.useEffect( () => {   
+    props.getEcommerceShippings()
   },[])
 
   return (
@@ -61,25 +58,17 @@ function TableList(props) {
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="warning">
-            <h4 className={classes.cardTitleWhite}>Usuarios del sistema</h4>
+            <h4 className={classes.cardTitleWhite}>Envios ecommerce</h4>
             <p className={classes.cardCategoryWhite}>
-              Aca puedes verificar, editar o ver usuarios
+              Aca puedes verificar los envios del ecommere
             </p>
           </CardHeader>
           <CardBody>
             <Table
-              crud={true}
               tableHeaderColor="warning"
-              tableHead={["Nombre", "Apellido", "Correo", "Rol"]}
-              tableKeys={["name","lastName","email","role"]}
-              tableData={props.users}
-              handleEdit={(value)=>{
-                props.selectUserId(value["_id"])
-                props.history.push("user")
-              }}
-              handleDelete={(value)=>{
-                console.log("delete",value)
-              }}
+              tableHead={["Fecha","Tienda", "idTienda", "País", "Estado", "Ciudad", "Dirección", "Código Postal", "Nombres", "Producto", "Medidas", "Valor shipping"]}
+              tableKeys={["shopDate","shop","shopID","country","state","city","address","postalCode","name","product","measures","shippingValue"]}
+              tableData={props.shippings}           
             />
           </CardBody>
         </Card>
@@ -91,15 +80,15 @@ function TableList(props) {
 
 const mapStateToProps = ( state ) => {
 
-  const { users } = state.users
+  const { shippings } = state.ecommerce
 
   const { loading } = state.app
 
   return {
-    users,
+    shippings,
     loading  
   };
 };
 
 
-export default connect(mapStateToProps, { getUsers, selectUserId })(TableList);
+export default connect(mapStateToProps, { getEcommerceShippings })(EcommerceList);

@@ -18,19 +18,21 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
-import LocationOn from "@material-ui/icons/LocationOn";
+//import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import UserProfile from "views/UserProfile/UserProfile.js";
-import TableList from "views/TableList/TableList.js";
-import Maps from "views/Maps/Maps.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
+//import UserProfile from "views/UserProfile/UserProfile.js";
+//import TableList from "views/TableList/TableList.js";
+//import Maps from "views/Maps/Maps.js";
+//import NotificationsPage from "views/Notifications/Notifications.js";
 
 
 //mitrovich views
 import Users from "views/Users"
 import UserForm from "views/UserForm"
+import Reports from "views/Reports";
+import Ecommerce from "views/Ecommerce"
 
 const dashboardRoutes = [
   {
@@ -60,7 +62,7 @@ const dashboardRoutes = [
     name: "Reportes",
     rtlName: "قائمة الجدول",
     icon: "content_paste",
-    component: TableList,
+    component: Reports,
     layout: "/admin"
   },
   /*{
@@ -84,17 +86,17 @@ const dashboardRoutes = [
     name: "Envios Ecommerce",
     rtlName: "إخطارات",
     icon: Notifications,
-    component: NotificationsPage,
+    component: Ecommerce,
     layout: "/admin"
   },
-  {
+  /*{
     path: "/notifications",
     name: "Notifications",
     rtlName: "إخطارات",
     icon: Notifications,
     component: NotificationsPage,
     layout: "/admin"
-  },
+  },*/
 ];
 
 export default dashboardRoutes;
