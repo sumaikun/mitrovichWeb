@@ -22,3 +22,8 @@ export const SELECT_USER_ID = "SELECT_USER_ID";
 // ---------------- Ecommerce types --------------------------
 
 export const SET_ECOMMERCE_SHIPPINGS = "SET_ECOMMERCE_SHIPPINGS";
+
+
+// ---------------- Reports types --------------------------
+
+export const EXECUTE_SERVIENTREGA_AUTOMATION = "EXECUTE_SERVIENTREGA_AUTOMATION";

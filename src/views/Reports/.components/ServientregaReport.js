@@ -7,6 +7,10 @@ import Alert from "components/Alert"
 
 import moment from 'moment'
 
+//redux
+import { connect } from "react-redux";
+import { executeServientregaAutomation } from "redux/actions/reports";
+
 const styles = {
     inputContainer: {
         display:"flex",
@@ -17,7 +21,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function ServientregaReport(props) {
+function ServientregaReport(props) {
 
     const classes = useStyles();
     
@@ -82,6 +86,8 @@ export default function ServientregaReport(props) {
                         setAlertProperties({ severity:"info",
                              message:"vamos a generar el reporte",
                             open:true })
+
+                        props.executeServientregaAutomation()
                             
                         handleClose()
                     }} color="primary">
@@ -99,3 +105,16 @@ export default function ServientregaReport(props) {
        
     )
 }
+
+const mapStateToProps = ( state ) => {
+
+    const { loading } = state.app
+  
+    return {     
+      loading  
+    };
+  };
+  
+
+
+export default connect(mapStateToProps, { executeServientregaAutomation })(ServientregaReport);
