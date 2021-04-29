@@ -55,7 +55,7 @@ function UserForm(props) {
   const [ alertProperties, setAlertProperties ] = React.useState({ severity:"", message:"", open:false })
 
   const checkPassword = ( str ) => {
-    var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     return re.test(str);
   }
 
@@ -205,7 +205,51 @@ function UserForm(props) {
                       required={true}
                     />
                   </GridItem>
+                  { formData.role === "customer" &&
+                  <>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                      labelText="Customer key"
+                      id="customerKey"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      handleChange={handleChange}
+                      required={true}
+                      name="customerKey"
+                      value={formData.customerKey}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Customer secret"
+                        id="customerSecret"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        handleChange={handleChange}
+                        required={true}
+                        name="customerSecret"
+                        value={formData.customerSecret}
+                      />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="url tienda"
+                        id="shopUrl"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        handleChange={handleChange}
+                        required={true}
+                        name="shopUrl"
+                        value={formData.shopUrl}
+                      />
+                  </GridItem>
+                  </>
+                }
                 </GridContainer>
+                
               </CardBody>
               <CardFooter>
                 <Button color="warning" type="submit" >Guardar</Button>
