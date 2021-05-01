@@ -21,7 +21,16 @@ export default function CustomTable(props) {
   const classes = useStyles();
   const { tableHead, tableData, tableHeaderColor, handleEdit, handleDelete } = props;
   console.log("tableData",tableData)
- 
+  
+  const renderCell = (data) => {
+    if( isValidURL(data) )
+    {
+      return <a href={`${data}`}  target="_blank" >{data}</a>
+    }else{
+      return data
+    }
+  }
+
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -52,7 +61,7 @@ export default function CustomTable(props) {
           </TableHead>
         ) : null}
         <TableBody>
-          {tableData && tableData.map((prop, key) => {
+          { !props.children && tableData && tableData.map((prop, key) => {
             return (
 
               <TableRow key={key} className={classes.tableBodyRow}>
@@ -68,7 +77,7 @@ export default function CustomTable(props) {
 
                 {  typeof prop === "object" && props.tableKeys && props.tableKeys.map( (tKey, key) =>  
                   <TableCell className={classes.tableCell} key={ `${tKey}-${key}` }>
-                    {prop[tKey]}
+                    {renderCell(prop[tKey])}
                   </TableCell>
                   )  
                 }
@@ -80,7 +89,8 @@ export default function CustomTable(props) {
 
               </TableRow>
             );
-          })}          
+          })}     
+          {  props.children }     
         </TableBody>
       </Table>
     </div>
@@ -154,4 +164,10 @@ CustomTable.propTypes = {
   ]),
   tableHead: PropTypes.arrayOf(PropTypes.string),
   //tableData: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
+};
+
+
+function isValidURL(string) {
+  var res = string?.match(/(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/);
+  return (res !== null)
 };
