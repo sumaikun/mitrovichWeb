@@ -62,7 +62,9 @@ function SignOut(props) {
                         }).then((result) => {
                             if (result.value) {
                               props.logoutUser();
-                              window.location.reload();
+                              window.setTimeout(()=>{
+                                window.location.reload();
+                              },1000)                              
                             }
                         })
                     }}

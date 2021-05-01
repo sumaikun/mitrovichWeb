@@ -70,8 +70,8 @@ function TableList(props) {
             <Table
               crud={true}
               tableHeaderColor="warning"
-              tableHead={["Nombre", "Apellido", "Correo", "Rol"]}
-              tableKeys={["name","lastName","email","role"]}
+              tableHead={["Nombre", "Apellido", "Correo", "Rol", "Tienda"]}
+              tableKeys={["name","lastName","email","role","shopUrl"]}
               tableData={props.users}
               handleEdit={(value)=>{
                 props.selectUserId(value["_id"])
